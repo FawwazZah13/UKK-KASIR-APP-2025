@@ -31,13 +31,13 @@
                     <a href="#}" class="d-block text-dark text-decoration-none p-3 rounded">
                         <i class="fa-solid fa-house text-dark"></i> Dashboard
                     </a>
-                    <a href="" class="d-block text-dark text-decoration-none p-3 rounded">
+                    <a href="{{ route('produk.index') }}" class="d-block text-dark text-decoration-none p-3 rounded">
                         <i class="fa-solid fa-shop text-dark"></i> Produk
                     </a>
-                    <a href="" class="d-block text-dark text-decoration-none p-3 rounded">
+                    <a href="{{ route('pembelian.index') }}" class="d-block text-dark text-decoration-none p-3 rounded">
                         <i class="fa-solid fa-cart-shopping text-dark"></i> Pembelian
                     </a>
-                    <a href="#" class="d-block text-dark text-decoration-none p-3 rounded">
+                    <a href="{{ route('users.index') }}" class="d-block text-dark text-decoration-none p-3 rounded">
                         <i class="fa-solid fa-user text-dark"></i> User
                     </a>
                     <form action="#" method="POST" class="w-100">
@@ -60,7 +60,7 @@
                         </li>
                     </ol>
                 </nav>
- 
+
     {{-- p
         <div class="d-flex">
             <!-- Sidebar Admin -->

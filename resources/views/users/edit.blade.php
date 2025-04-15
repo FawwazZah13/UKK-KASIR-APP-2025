@@ -2,7 +2,7 @@
 
 @section('content')
 
-<form action="#" method="POST" class="border p-4 rounded shadow bg-white" style="width: 1000px">
+<form action="{{ route('users.update', ['id' => $user->id]) }}" method="POST" class="border p-4 rounded shadow bg-white" style="width: 1000px">
     @csrf
     @method('PUT')
     <h4>Produk</h4>
@@ -10,11 +10,11 @@
       <div class="col-md-6">
         <div class="mb-3">
           <label class="form-label">Nama</label>
-          <input type="text" class="form-control" name="name" id="name" placeholder="Masukan nama"  value="nama">
+          <input type="text" class="form-control" name="name" id="name" placeholder="Masukan nama"  value="{{ $user->name }}">
         </div>
         <div class="mb-3">
           <label class="form-label">Email</label>
-          <input type="email" class="form-control" name="email" id="email" placeholder="Masukan email" value="email">
+          <input type="email" class="form-control" name="email" id="email" placeholder="Masukan email" value="{{ $user->email }}">
         </div>
       </div>
       <div class="col-md-6">
@@ -24,7 +24,7 @@
                 <option value="admin" >Admin</option>
                 <option value="petugas" >Petugas</option>
             </select>
-        </div>    
+        </div>
         <div class="mb-3">
           <label class="form-label">Password</label>
           <input type="password" class="form-control" name="password" id="password" placeholder="Masukan password">

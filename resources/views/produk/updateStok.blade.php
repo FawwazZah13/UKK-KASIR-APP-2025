@@ -1,13 +1,13 @@
 @extends('layout.template')
 @section('content')
 
-<form action="" method="POST"  class="border p-4 rounded shadow bg-white">
+<form action="{{ route('produk.updateStokProduk', ['id' => $produks->id]) }}" method="POST"  class="border p-4 rounded shadow bg-white">
     @csrf
     @method('PUT')
     <div class="row">
           <div class="mb-3">
             <label class="form-label">Nama Produk</label>
-            <input type="text" class="form-control" name="nama_produk" id="nama_produk" value="" readonly>
+            <input type="text" class="form-control" name="nama_produk" id="nama_produk" value="{{ $produks->nama_produk }}" readonly>
           </div>
           <div class="mb-3">
             <label class="form-label">Stok</label>

@@ -2,10 +2,10 @@
 @section('content')
 
 
-<a href="#" class="btn btn-primary m-3">
+<a href="{{ route('pembelian.show') }}" class="btn btn-primary m-3">
     Tambah Penjulaan
 </a>
-  
+
 
 <a href="#" class="btn btn-success m-3">
     Export Excel
@@ -24,7 +24,7 @@
             </tr>
         </thead>
         <tbody>
-        
+
             <tr>
                 <th scope="row">1</th>
                 <td>Fawwaz</td>
@@ -58,22 +58,22 @@
                             <p><strong>Member Status:</strong> Non Member</p>
                             <p><strong>No HP:</strong> 085894981176</p>
                             <p><strong>Poin Member:</strong> 100 poin</p>
-                            <p><strong>Bergabung Sejak:</strong> 
-                         
+                            <p><strong>Bergabung Sejak:</strong>
+
                             14 Mein
-                          
+
                             </p>
 
                             <hr>
 
                             <h6>Daftar Produk:</h6>
                             <ul>
-                             
+
                                     <li>Nama Produk : Iphone 15</li>
                                     <li>Qty : 2</li>
                                     <li>Harga : Rp. 20.000</li>
                                     <li>Sub Total : Rp. 20.000</li>
-                             
+
                             </ul>
                         </div>
                         <div class="modal-footer">
@@ -82,7 +82,7 @@
                     </div>
                 </div>
             </div>
-         
+
         </tbody>
     </table>
 </div>

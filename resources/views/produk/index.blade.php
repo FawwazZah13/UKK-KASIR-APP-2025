@@ -11,7 +11,7 @@
 </form>
 
 {{-- a --}}
-    <a href="" class="btn btn-primary m-3">
+    <a href="{{ route('produk.create') }}" class="btn btn-primary m-3">
         Create Produk</a>
 
     <div class="container border p-3 rounded shadow bg-white">
@@ -27,27 +27,29 @@
                 </tr>
             </thead>
             <tbody>
+                @foreach ($produks as $item)
                     <tr>
-                        <th scope="row">1</th>
+                        <th scope="row">{{ $loop->iteration }}</th>
                         <td class="text-secondary">
-                                <img src="" alt=""
-                                    style="width: 80px;">
+                            <img src="{{ asset('img/'. $item->gambar) }}" alt=""
+                            style="width: 80px;">
                         </td>
-                        <td class="text-secondary">Sabun</td>
-                        <td class="text-secondary">Rp. 10.000</td>
-                        <td class="text-secondary">1</td>
+                        <td class="text-secondary">{{ $item->nama_produk }}</td>
+                        <td class="text-secondary">{{'Rp. ' . number_format($item->harga) }}</td>
+                        <td class="text-secondary">{{ $item->stok }}</td>
                         <td>
-                            <a href="#" class="btn btn-primary">Update Stok</a>
-                            <a href="#" class="btn btn-warning">Update</a>
+                            <a href="{{ route('produk.updateStok', $item->id) }}" class="btn btn-primary">Update Stok</a>
+                            <a href="{{ route('produk.edit', $item->id) }}" class="btn btn-warning">Update</a>
 
-                            <form action="#" method="POST"
-                                style="display: inline-block;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger"
-                                    onclick="return confirm('Apakah Anda yakin?')">Delete</button>
-                            </form>
-                        </td>
+                            <form action="{{ route('produk.delete', $item->id) }}" method="POST"
+                            style="display: inline-block;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger"
+                            onclick="return confirm('Apakah Anda yakin?')">Delete</button>
+                        </form>
+                    </td>
+                    @endforeach
                     </tr>
             </tbody>
         </table>
@@ -74,7 +76,7 @@
                         <td class="text-secondary">Rp. 10.000</td>
                         <td class="text-secondary">8</td>
                     </tr>
-               
+
             </tbody>
         </table>
 

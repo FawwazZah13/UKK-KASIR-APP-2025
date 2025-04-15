@@ -2,7 +2,7 @@
 
 @section('content')
 
-<form action="" method="POST" class="border p-4 rounded shadow bg-white" style="width: 1000px">
+<form action="{{ route('users.new') }}" method="POST" class="border p-4 rounded shadow bg-white" style="width: 1000px">
     @csrf
     <h4>Produk</h4>
     <div class="row">
