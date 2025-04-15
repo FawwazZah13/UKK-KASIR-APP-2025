@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container d-flex justify-content-center align-items-center vh-100">
-    <form action="#" method="POST" class="border p-4 rounded shadow bg-white" style="width: 300px">
+    <form action="{{ route('login.auth') }}" method="POST" class="border p-4 rounded shadow bg-white" style="width: 300px">
         @csrf
         <h4>Login Form</h4>
         <div class="mb-3">

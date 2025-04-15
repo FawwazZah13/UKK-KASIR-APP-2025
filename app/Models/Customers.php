@@ -6,10 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customers extends Model
 {
-    public $fillable = [
+    protected $fillable = [
         'name',
         'no_tlp',
         'poin',
-        'status_customer'
+        'status_customer',
     ];
+
+    public function pembelian(){
+        return $this->hasMany(Pembelians::class, 'customer_id');
+    }
 }

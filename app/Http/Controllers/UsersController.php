@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\Console\Input\Input;
 
 class UsersController extends Controller
@@ -71,5 +72,28 @@ public function update(Request $request, $id)
         $user->delete();
 
         return redirect()->route('users.index');
+    }
+
+    public function login(Request $request)
+    {
+
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required'
+        ]);
+
+        $credentials = $request->only(['email', 'password']);
+
+        if (Auth::attempt($credentials)) {
+            // dd("Login berhasil!", Auth::user()); // Cek apakah user berhasil login
+            return redirect()->route('dashboard');
+        } else {
+            return back()->withErrors(['email' => 'Email atau password salah!']);
+        }
+    }
+
+    public function logout(){
+        Auth::logout();
+        return redirect()->route('login.auth')->with('succes', 'Anda berhasil logout');
     }
 }

@@ -3,32 +3,31 @@
 @section('content')
     <div class="p-5 bg-white rounded-lg shadow">
         <div class="flex justify-between mb-4">
-            <a href="#" class="btn btn-secondary">Kembali</a>
-            <a href="#" class="btn btn-primary">Unduh</a>
+            <a href="{{ route('pembelian.index') }}" class="btn btn-secondary">Kembali</a>
+            <a href="{{ route('unduhPdf.pembelian', $pembelian->id) }}" class="btn btn-primary">Unduh</a>
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
             <!-- Kiri -->
             <div>
                 <p>
-
-                    <strong>+62 85894981178</strong><br>
-                    MEMBER SEJAK :
-                    tgl<br>
-                    {{-- MEMBER POIN : {{ $pembelian->poin }}</p> --}}
-                    MEMBER POIN : 100
-                </p>
-
+                    @if ($pembelian->customer->status_customer == "member")
+                <strong>{{ $pembelian->customer->no_tlp }}</strong><br>
+                MEMBER SEJAK :
+                {{ \Carbon\Carbon::parse($pembelian->customer->created_at)->format('d F Y') }}<br>
+                {{-- MEMBER POIN : {{ $pembelian->poin }}</p> --}}
+                MEMBER POIN : {{ $pembelian->poin}}</p>
+                @endif
             </div>
             <!-- Kanan -->
             <div style="text-align: right;">
-                <p style="margin: 0;">Invoice - #2</p>
-                <p style="margin: 0;">tvl</p>
+                <p style="margin: 0;">Invoice - #{{ $pembelian->id }}</p>
+                <p style="margin: 0;">{{ \Carbon\Carbon::parse($pembelian->tanggal_pembelian)->format('d F Y') }}</p>
             </div>
         </div>
 
         <p>
-        </p>
+</p>
 
 
         <table class="table mt-4">
@@ -41,33 +40,33 @@
                 </tr>
             </thead>
             <tbody>
-
-                <tr>
-                    <td>Iphone 15</td>
-                    <td>Rp. 20.000.000</td>
-                    <td>2</td>
-                    <td>Rp. 20.000.000</td>
-                </tr>
-
+                @foreach ($pembelian->details as $detail)
+                    <tr>
+                        <td>{{ $detail->produk->nama_produk }}</td>
+                        <td>Rp. {{ number_format($detail->produk->harga) }}</td>
+                        <td>{{ $detail->qty }}</td>
+                        <td>Rp. {{ number_format($detail->sub_total) }}</td>
+                    </tr>
+                @endforeach
             </tbody>
         </table>
 
         <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
             <!-- Kiri -->
             <p>
-                Poin digunakan :
-                <strong>
-                    200 dipakai
-                </strong><br>
+                    Poin digunakan :
+                    <strong>
+                        {{ $pembelian->total_poin -  $pembelian->customer->poin }}
+                    </strong><br>
 
 
                 Kasir :
                 <strong style="margin-left: 10px;">
-                    Petugas
+                    {{ $pembelian->users->name }}
                 </strong><br>
 
                 <strong>
-                    Kembalian : Rp. 1.000.000
+                    Kembalian : Rp. {{ number_format($pembelian->total_kembalian) }}
                 </strong>
             </p>
 
@@ -75,7 +74,7 @@
             <!-- Kanan -->
             <div style="text-align: right;">
                 <h3 style="margin: 0;">Total :
-                    <strong>Rp. 20.000.000</strong>
+                <strong>Rp. {{ number_format($pembelian->total_harga) }}</strong>
                 </h3>
             </div>
         </div>

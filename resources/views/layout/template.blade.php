@@ -22,13 +22,13 @@
 </head>
 
 <body>
-    {{-- a --}}
+    @if (Auth::check() && Auth::user()->role == 'admin')
         <div class="d-flex">
             <!-- Sidebar Admin -->
             <div class="d-flex flex-column justify-content-between bg-light text-dark p-3 border-end shadow sidebar">
                 <div>
                     <img src="{{ asset('img/logo.png') }}" style="width: 200px">
-                    <a href="#}" class="d-block text-dark text-decoration-none p-3 rounded">
+                    <a href="{{ route('dashboard') }}" class="d-block text-dark text-decoration-none p-3 rounded">
                         <i class="fa-solid fa-house text-dark"></i> Dashboard
                     </a>
                     <a href="{{ route('produk.index') }}" class="d-block text-dark text-decoration-none p-3 rounded">
@@ -40,7 +40,7 @@
                     <a href="{{ route('users.index') }}" class="d-block text-dark text-decoration-none p-3 rounded">
                         <i class="fa-solid fa-user text-dark"></i> User
                     </a>
-                    <form action="#" method="POST" class="w-100">
+                    <form action="{{ route('logout.user') }}" method="POST" class="w-100">
                         @csrf
                         <button type="submit" class="btn btn-danger w-100">Logout</button>
                     </form>
@@ -56,27 +56,27 @@
                             </a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">
-                            <a href="#" class="text-decoration-none text-secondary">Dashboard</a>
+                            <a href="{{ route('dashboard') }}" class="text-decoration-none text-secondary">Dashboard</a>
                         </li>
                     </ol>
                 </nav>
-
-    {{-- p
+    @endif
+    @if (Auth::check() && Auth::user()->role == 'petugas')
         <div class="d-flex">
             <!-- Sidebar Admin -->
             <div class="d-flex flex-column justify-content-between bg-light text-dark p-3 border-end shadow sidebar">
                 <div>
                     <img src="{{ asset('img/logo.png') }}" style="width: 200px">
-                    <a href="" class="d-block text-dark text-decoration-none p-3 rounded">
+                    <a href="{{ route('dashboard') }}" class="d-block text-dark text-decoration-none p-3 rounded">
                         <i class="fa-solid fa-house text-dark"></i> Dashboard
                     </a>
-                    <a href="" class="d-block text-dark text-decoration-none p-3 rounded">
+                    <a href="{{ route('produk.index') }}" class="d-block text-dark text-decoration-none p-3 rounded">
                         <i class="fa-solid fa-shop text-dark"></i> Produk
                     </a>
-                    <a href="" class="d-block text-dark text-decoration-none p-3 rounded">
+                    <a href="{{ route('pembelian.index') }}" class="d-block text-dark text-decoration-none p-3 rounded">
                         <i class="fa-solid fa-cart-shopping text-dark"></i> Pembelian
                     </a>
-                    <form action="#" method="POST" class="w-100">
+                    <form action="{{ route('logout.user')}}" method="POST" class="w-100">
                         @csrf
                         <button type="submit" class="btn btn-danger w-100">Logout</button>
                     </form>
@@ -95,8 +95,8 @@
                             <a href="" class="text-decoration-none text-secondary">Dashboard</a>
                         </li>
                     </ol>
-                </nav> --}}
-
+                </nav>
+    @endif
 
     @yield('content')
     <script>

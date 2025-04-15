@@ -1,13 +1,14 @@
+
 @extends('layout.template')
 @section('content')
 
-
+@if (Auth::check() && Auth::user()->role == 'petugas')
 <a href="{{ route('pembelian.show') }}" class="btn btn-primary m-3">
     Tambah Penjulaan
 </a>
+@endif
 
-
-<a href="#" class="btn btn-success m-3">
+<a href="{{ route('excel.pembelian') }}" class="btn btn-success m-3">
     Export Excel
 </a>
 
@@ -24,17 +25,17 @@
             </tr>
         </thead>
         <tbody>
-
+            @foreach ($pembelian as $item)
             <tr>
-                <th scope="row">1</th>
-                <td>Fawwaz</td>
-                <td>13 Mei 2007</td>
-                <td>Rp. 10.000</td>
-                <td>Petugas</td>
+                <th scope="row">{{ $loop->iteration }}</th>
+                <td>{{ $item->customer->name }}</td>
+                <td>{{ $item->tanggal_pembelian }}</td>
+                <td>Rp. {{ number_format($item->total_harga) }}</td>
+                <td>{{ $item->customer->name }}</td>
                 <td>
                     <div class="d-flex justify-content-around">
                         <!-- Tombol lihat -->
-                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#lihat-">
+                        <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#lihat-{{ $item->id }}">
                             Lihat
                         </button>
 
@@ -47,33 +48,36 @@
             </tr>
 
             <!-- Modal -->
-            <div class="modal fade" id="lihat-" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+            <div class="modal fade" id="lihat-{{ $item->id }}" tabindex="-1" aria-labelledby="modalLabel{{ $item->id }}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modalLabel">Detail Penjualan</h5>
+                            <h5 class="modal-title" id="modalLabel{{ $item->id }}">Detail Penjualan</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                         </div>
                         <div class="modal-body">
-                            <p><strong>Member Status:</strong> Non Member</p>
-                            <p><strong>No HP:</strong> 085894981176</p>
-                            <p><strong>Poin Member:</strong> 100 poin</p>
+                            <p><strong>Member Status:</strong> {{ $item->customer->status_customer }}</p>
+                            <p><strong>No HP:</strong> {{ $item->customer->no_tlp }}</p>
+                            <p><strong>Poin Member:</strong> {{ $item->customer->poin }}</p>
                             <p><strong>Bergabung Sejak:</strong>
-
-                            14 Mein
-
+                            @if ($item->customer->status_customer === 'member')
+                            {{ \Carbon\Carbon::parse($item->customer->created_at)->format('d F Y') }}
+                            @endif
+                            -
                             </p>
+
+                            {{-- <p><strong>Dibuat Oleh:</strong> {{ $item->user->name }}</p> --}}
 
                             <hr>
 
                             <h6>Daftar Produk:</h6>
                             <ul>
-
-                                    <li>Nama Produk : Iphone 15</li>
-                                    <li>Qty : 2</li>
-                                    <li>Harga : Rp. 20.000</li>
-                                    <li>Sub Total : Rp. 20.000</li>
-
+                                @foreach ($item->details as $detail)
+                                    <li>Nama Produk : {{ $detail->produk->nama_produk }}</li>
+                                    <li>Qty : {{ $detail->qty }}</li>
+                                    <li>Harga : Rp. {{ number_format($detail->produk->harga) }}</li>
+                                    <li>Sub Total : Rp. {{ number_format($detail->sub_total) }}</li>
+                                @endforeach
                             </ul>
                         </div>
                         <div class="modal-footer">
@@ -82,7 +86,7 @@
                     </div>
                 </div>
             </div>
-
+            @endforeach
         </tbody>
     </table>
 </div>
