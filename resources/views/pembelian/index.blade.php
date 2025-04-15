@@ -12,8 +12,32 @@
     Export Excel
 </a>
 
+<div class="d-flex flex-wrap align-items-center gap-3 ms-3 mb-3">
+
+    {{-- Form Filter Tanggal --}}
+    <form method="GET" action="{{ route('pembelian.filterPick') }}" class="d-flex align-items-center gap-2">
+        <label for="tanggal" class="col-form-label me-2">Filter Tanggal:</label>
+        <input type="date" name="tanggal" id="tanggal" class="form-control" value="{{ request('tanggal') }}">
+        <button type="submit" class="btn btn-primary">Tampilkan</button>
+    </form>
+
+    {{-- Form Filter Per Hari/Bulan/Tahun --}}
+    <form method="GET" action="{{ route('pembelian.filter') }}" class="d-flex align-items-center gap-2">
+        <label for="filter" class="col-form-label me-2">Filter Berdasarkan:</label>
+        <select name="filter" id="filter" class="form-select" onchange="this.form.submit()">
+            <option value="">-- Semua --</option>
+            <option value="hari" {{ request('filter') == 'hari' ? 'selected' : '' }}>Per Hari</option>
+            <option value="bulan" {{ request('filter') == 'bulan' ? 'selected' : '' }}>Per Bulan</option>
+            <option value="tahun" {{ request('filter') == 'tahun' ? 'selected' : '' }}>Per Tahun</option>
+        </select>
+    </form>
+
+</div>
+
+
+
 <div class="container border p-3 rounded shadow bg-white">
-    <table id="myTable" class="table table-striped" style="width:100%">
+    <table id="table" class="table table-striped" style="width:100%">
         <thead>
             <tr>
                 <th>#</th>
@@ -31,7 +55,7 @@
                 <td>{{ $item->customer->name }}</td>
                 <td>{{ $item->tanggal_pembelian }}</td>
                 <td>Rp. {{ number_format($item->total_harga) }}</td>
-                <td>{{ $item->customer->name }}</td>
+                <td>{{ $item->users->name }}</td>
                 <td>
                     <div class="d-flex justify-content-around">
                         <!-- Tombol lihat -->
@@ -40,7 +64,7 @@
                         </button>
 
                         <!-- Tombol unduh -->
-                        <a href="#" class="btn btn-info">
+                        <a href="{{ route('unduhPdf.pembelian', $item->id) }}" class="btn btn-info">
                             Unduh Bukti
                         </a>
                     </div>

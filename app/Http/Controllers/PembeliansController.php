@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 // use PembelianExport;
+use Carbon\Carbon;
 use App\Models\Details;
 use App\Models\Produks;
 use App\Models\Customers;
@@ -24,6 +25,35 @@ class PembeliansController extends Controller
         $pembelian = Pembelians::all();
         return view('pembelian.index', compact('pembelian'));
     }
+    public function filter(Request $request)
+{
+    $query = Pembelians::query();
+
+    if ($request->filter === 'hari') {
+        $query->whereDate('tanggal_pembelian', Carbon::today());
+    } elseif ($request->filter === 'bulan') {
+        $query->whereMonth('tanggal_pembelian', Carbon::now()->month);
+    } elseif ($request->filter === 'tahun') {
+        $query->whereYear('tanggal_pembelian', Carbon::now()->year);
+    }
+
+    $pembelian = $query->with(['customer', 'users', 'details.produk'])->get();
+
+    return view('pembelian.index', compact('pembelian'));
+}
+
+public function filterPick(Request $request)
+{
+    $query = Pembelians::query();
+
+    if ($request->filled('tanggal')) {
+        $query->whereDate('tanggal_pembelian', $request->tanggal);
+    }
+
+    $pembelian = $query->with(['customer', 'users', 'details.produk'])->get();
+
+    return view('pembelian.index', compact('pembelian'));
+}
 
 
     /**

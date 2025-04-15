@@ -23,6 +23,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/pembelian', [PembeliansController::class, 'index'])->name('pembelian.index');
     Route::get('/pembelian/{id}/unduh-pdf', [PembeliansController::class, 'unduhPdf'])->name('unduhPdf.pembelian');
     Route::get('/export/pembelian', [PembeliansController::class, 'export'])->name('excel.pembelian');
+    Route::get('/filter', [PembeliansController::class, 'filter'])->name('pembelian.filter');
+    Route::get('/filter/pick', [PembeliansController::class, 'filterPick'])->name('pembelian.filterPick');
+
 });
 
 

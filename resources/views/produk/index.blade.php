@@ -10,10 +10,10 @@
     </div>
 </form>
 
-{{-- a --}}
+@if(Auth::check() && Auth::user()->role === "admin")
     <a href="{{ route('produk.create') }}" class="btn btn-primary m-3">
         Create Produk</a>
-
+{{-- @endif --}}
     <div class="container border p-3 rounded shadow bg-white">
         <table class="table">
             <thead>
@@ -53,33 +53,35 @@
                     </tr>
             </tbody>
         </table>
-{{-- p
-    <div class="container border p-3 rounded shadow bg-white">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Foto Produk</th>
-                    <th>Nama Produk</th>
-                    <th>Harga</th>
-                    <th>Stok</th>
-                </tr>
-            </thead>
-            <tbody>
+@endif
+
+        @if(Auth::check() && Auth::user()->role === "petugas")
+
+        <div class="container border p-3 rounded shadow bg-white">
+            <table class="table">
+                <thead>
                     <tr>
-                        <th scope="row">1</th>
-                        <td class="text-secondary">
-                                <img src="" alt=""
-                                    style="width: 80px;">
-                        </td>
-                        <td class="text-secondary">Sabun</td>
-                        <td class="text-secondary">Rp. 10.000</td>
-                        <td class="text-secondary">8</td>
+                        <th>#</th>
+                        <th>Foto Produk</th>
+                        <th>Nama Produk</th>
+                        <th>Harga</th>
+                        <th>Stok</th>
                     </tr>
-
-            </tbody>
-        </table>
-
-
-    </div> --}}
+                </thead>
+                <tbody>
+                    @foreach ($produks as $item)
+                        <tr>
+                            <th scope="row">{{ $loop->iteration }}</th>
+                            <td class="text-secondary">
+                                <img src="{{ asset('img/'. $item->gambar) }}" alt=""
+                                style="width: 80px;">
+                            </td>
+                            <td class="text-secondary">{{ $item->nama_produk }}</td>
+                            <td class="text-secondary">{{'Rp. ' . number_format($item->harga) }}</td>
+                            <td class="text-secondary">{{ $item->stok }}</td>
+                        @endforeach
+                        </tr>
+                </tbody>
+            </table>
+          @endif
 @endsection

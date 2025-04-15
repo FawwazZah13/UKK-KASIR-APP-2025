@@ -16,4 +16,5 @@ class Details extends Model
     ];
     public function pembelian() { return $this->belongsTo(Pembelians::class); }
     public function produk() { return $this->belongsTo(Produks::class); }
+    
 }
