@@ -11,11 +11,20 @@ class ProduksController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $produks = Produks::all();
+    public function index(Request $request) {
+        $query = Produks::query();
+        if($request->has('search') && $request->search != '') {
+           $search = $request->search;
+           $query->where('nama_produk', 'like', "%{$search}%")
+           ->orWhere('harga', 'like', "%{$search}%");
+        }
+   
+        $produks = $query->get();
+   
         return view('produk.index', compact('produks'));
-    }
+       }
+
+    
 
     /**
      * Show the form for creating a new resource.

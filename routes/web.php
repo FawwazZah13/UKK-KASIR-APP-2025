@@ -18,9 +18,9 @@ Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashbo
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [UsersController::class, 'logout'])->name('logout.user');
     Route::get('/produk', [ProduksController::class, 'index'])->name('produk.index');
-    // Route::get('/produk/search', [ProdukController::class, 'search'])->name('search.produk');
     Route::get('/pembelian/showProduk', [PembeliansController::class, 'show'])->name('pembelian.show');
     Route::get('/pembelian', [PembeliansController::class, 'index'])->name('pembelian.index');
+    Route::get('/search/pembelian', [PembeliansController::class, 'search'])->name('pembelian.search');
     Route::get('/pembelian/{id}/unduh-pdf', [PembeliansController::class, 'unduhPdf'])->name('unduhPdf.pembelian');
     Route::get('/export/pembelian', [PembeliansController::class, 'export'])->name('excel.pembelian');
     Route::get('/filter', [PembeliansController::class, 'filter'])->name('pembelian.filter');

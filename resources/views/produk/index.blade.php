@@ -3,7 +3,7 @@
 @section('content')
 
 <!-- Form pencarian produk -->
-<form method="GET" action="#" class="mb-3">
+<form method="GET" action="{{ route('produk.index') }}" class="mb-3">
     <div class="input-group">
         <input type="text" name="search" class="form-control" placeholder="Cari produk..." value="">
         <button class="btn btn-outline-secondary" type="submit">Cari</button>

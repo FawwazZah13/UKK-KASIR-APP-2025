@@ -25,7 +25,6 @@ class PembeliansController extends Controller
         $pembelian = Pembelians::all();
         return view('pembelian.index', compact('pembelian'));
     }
-
     /**
      * Show the form for creating a new resource.
      */
@@ -310,7 +309,30 @@ class PembeliansController extends Controller
         return view('pembelian.index', compact('pembelian'));
     }
 
-
+    public function search(Request $request) {
+        // Membuat query untuk Pembelian beserta relasi customer dan users
+        $query = Pembelians::query()->with('customer', 'users');
+    
+        // Jika parameter 'search' ada dan tidak kosong
+        if ($request->has('search') && $request->search != '') {
+            $search = $request->search;
+            
+            // Mencari nama customer dan users yang sesuai dengan query pencarian
+            $query->whereHas('customer', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            })
+            ->orWhereHas('users', function ($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+    
+        // Mendapatkan data pembelian yang sesuai dengan filter pencarian
+        $pembelian = $query->get();
+    
+        // Mengirimkan data ke tampilan
+        return view('pembelian.index', compact('pembelian'));
+    }
+    
 
 }
 

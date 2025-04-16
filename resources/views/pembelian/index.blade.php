@@ -35,6 +35,12 @@
             <option value="tahun" {{ request('filter') == 'tahun' ? 'selected' : '' }}>Per Tahun</option>
         </select>
     </form>
+    <form method="GET" action="{{ route('pembelian.search') }}" class="mb-3">
+        <div class="input-group col-form-label me-2 mt-3">
+            <input type="text" name="search" class="form-control" placeholder="Cari..." value="">
+            <button class="btn btn-outline-secondary" type="submit">Cari</button>
+        </div>
+    </form>
 
 </div>
 
