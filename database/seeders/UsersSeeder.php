@@ -15,12 +15,5 @@ class UsersSeeder extends Seeder
             'password' => '120', // tanpa hashing
             'role' => 'Admin',
         ]);
-
-        User::create([
-            'name' => 'Petugas',
-            'email' => 'petugas@gmail.com',
-            'password' => '123', // tanpa hashing
-            'role' => 'Petugas',
-        ]);
     }
 }

@@ -10,16 +10,20 @@ use Symfony\Component\Console\Input\Input;
 
 class UsersController extends Controller
 {
-    public function index() {
-        $user = User::all();
+    public function index()
+    {
+        $user = User::where('role', '!=', 'admin')->get();
         return view('users.index', compact('user'));
+
     }
 
-    public function create () {
+    public function create()
+    {
         return view('users.create');
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $request->validate([
             'name' => 'required',
             'email' => 'required|email',
@@ -34,14 +38,15 @@ class UsersController extends Controller
 
         $user->save();
         return redirect()->route('users.index')->with('Success', 'Data berhasil di buat');
-}
+    }
 
-public function edit ($id) {
-    $user= User::find($id);
-    return view('users.edit', compact('user'));
-}
+    public function edit($id)
+    {
+        $user = User::find($id);
+        return view('users.edit', compact('user'));
+    }
 
-public function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
 
         $request->validate([
@@ -67,7 +72,8 @@ public function update(Request $request, $id)
         return redirect()->route('users.index');
     }
 
-    public function destroy($id){
+    public function destroy($id)
+    {
         $user = User::findOrFail($id);
         $user->delete();
 
@@ -92,7 +98,8 @@ public function update(Request $request, $id)
         }
     }
 
-    public function logout(){
+    public function logout()
+    {
         Auth::logout();
         return redirect()->route('login.auth')->with('succes', 'Anda berhasil logout');
     }

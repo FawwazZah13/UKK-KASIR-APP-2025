@@ -25,36 +25,6 @@ class PembeliansController extends Controller
         $pembelian = Pembelians::all();
         return view('pembelian.index', compact('pembelian'));
     }
-    public function filter(Request $request)
-{
-    $query = Pembelians::query();
-
-    if ($request->filter === 'hari') {
-        $query->whereDate('tanggal_pembelian', Carbon::today());
-    } elseif ($request->filter === 'bulan') {
-        $query->whereMonth('tanggal_pembelian', Carbon::now()->month);
-    } elseif ($request->filter === 'tahun') {
-        $query->whereYear('tanggal_pembelian', Carbon::now()->year);
-    }
-
-    $pembelian = $query->with(['customer', 'users', 'details.produk'])->get();
-
-    return view('pembelian.index', compact('pembelian'));
-}
-
-public function filterPick(Request $request)
-{
-    $query = Pembelians::query();
-
-    if ($request->filled('tanggal')) {
-        $query->whereDate('tanggal_pembelian', $request->tanggal);
-    }
-
-    $pembelian = $query->with(['customer', 'users', 'details.produk'])->get();
-
-    return view('pembelian.index', compact('pembelian'));
-}
-
 
     /**
      * Show the form for creating a new resource.
@@ -285,37 +255,61 @@ public function filterPick(Request $request)
 
         $pdf = Pdf::loadView('pembelian.invoice-pdf', compact('pembelian'));
 
-        return $pdf->stream('invoice-pembelian-'.$id.'.pdf');
+        return $pdf->stream('invoice-pembelian-' . $id . '.pdf');
+    }
+    public function export(Request $request)
+    {
+        $filename = 'data-pembelian.xlsx';
+
+        if ($request->filter) {
+            $filename = 'data-pembelian-' . $request->filter . '.xlsx';
+        } elseif ($request->tanggal) {
+            $filename = 'data-pembelian-' . $request->tanggal . '.xlsx';
+        }
+
+        return Excel::download(new PembelianExport($request->filter, $request->tanggal), $filename);
     }
 
-    public function export()
+
+    public function filter(Request $request)
     {
-        return Excel::download(new PembelianExport, 'data-pembelian.xlsx');
+        $query = Pembelians::query();
+
+        if ($request->filter === 'hari') {
+            $query->whereDate('tanggal_pembelian', Carbon::today());
+
+        } elseif ($request->filter === 'minggu') {
+            $query->whereBetween('tanggal_pembelian', [
+                Carbon::now()->startOfWeek(),
+                Carbon::now()->endOfWeek()
+            ]);
+
+        } elseif ($request->filter === 'bulan') {
+            $query->whereMonth('tanggal_pembelian', Carbon::now()->month);
+
+        } elseif ($request->filter === 'tahun') {
+            $query->whereYear('tanggal_pembelian', Carbon::now()->year);
+        }
+
+        $pembelian = $query->with(['customer', 'users', 'details.produk'])->get();
+
+        return view('pembelian.index', compact('pembelian'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Pembelians $pembelian)
+
+    public function filterPick(Request $request)
     {
-        //
+        $query = Pembelians::query();
+
+        if ($request->filled('tanggal')) {
+            $query->whereDate('tanggal_pembelian', $request->tanggal);
+        }
+
+        $pembelian = $query->with(['customer', 'users', 'details.produk'])->get();
+
+        return view('pembelian.index', compact('pembelian'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Pembelians $pembelian)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Pembelians $pembelian)
-    {
-        //
-    }
 
 
 }

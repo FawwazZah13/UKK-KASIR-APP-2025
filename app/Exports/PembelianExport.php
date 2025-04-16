@@ -9,16 +9,38 @@ use Maatwebsite\Excel\Concerns\{
     ShouldAutoSize,
     WithMapping
 };
-
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use App\Models\Pembelians;
+use Carbon\Carbon;
 
 class PembelianExport implements FromCollection, WithHeadings, WithStyles, ShouldAutoSize, WithMapping
 {
+    protected $filter;
+    protected $tanggal;
+
+    public function __construct($filter = null, $tanggal = null)
+    {
+        $this->filter = $filter;
+        $this->tanggal = $tanggal;
+    }
+
     public function collection()
     {
-        // Ambil data pembelian beserta relasi customer dan detail produk
-        return Pembelians::with(['customer', 'details.produk'])->get();
+        $query = Pembelians::with(['customer', 'details.produk']);
+
+        if ($this->filter === 'hari') {
+            $query->whereDate('tanggal_pembelian', Carbon::today());
+        } elseif ($this->filter === 'bulan') {
+            $query->whereMonth('tanggal_pembelian', Carbon::now()->month);
+        } elseif ($this->filter === 'tahun') {
+            $query->whereYear('tanggal_pembelian', Carbon::now()->year);
+        }
+
+        if (!empty($this->tanggal)) {
+            $query->whereDate('tanggal_pembelian', $this->tanggal);
+        }
+
+        return $query->get();
     }
 
     public function headings(): array
@@ -44,12 +66,11 @@ class PembelianExport implements FromCollection, WithHeadings, WithStyles, Shoul
             $harga = number_format($item->produk->harga ?? 0, 0, ',', '.');
             return "$nama (x$qty) - Rp$harga";
         })->implode(', ');
-        
 
         return [
             $row->customer->name ?? '-',
             $row->customer->no_tlp ?? '-',
-            $row->customer->poin ?? '-',
+            $row->poin ?? '-',
             $produkList,
             'Rp ' . number_format($row->total_harga, 0, ',', '.'),
             'Rp ' . number_format($row->total_bayar, 0, ',', '.'),

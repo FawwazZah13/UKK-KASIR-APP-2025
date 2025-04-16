@@ -8,7 +8,10 @@
 </a>
 @endif
 
-<a href="{{ route('excel.pembelian') }}" class="btn btn-success m-3">
+{{-- <a href="{{ route('excel.pembelian', request()->only(['filter', 'tanggal'])) }}) }}" class="btn btn-success m-3">
+    Export Excel
+</a> --}}
+<a href="{{ route('excel.pembelian') . '?' . http_build_query(request()->only(['filter', 'tanggal'])) }}" class="btn btn-success m-3">
     Export Excel
 </a>
 
@@ -27,6 +30,7 @@
         <select name="filter" id="filter" class="form-select" onchange="this.form.submit()">
             <option value="">-- Semua --</option>
             <option value="hari" {{ request('filter') == 'hari' ? 'selected' : '' }}>Per Hari</option>
+            <option value="inggu" {{ request('filter') == 'inggu' ? 'selected' : '' }}>Per Minggu</option>
             <option value="bulan" {{ request('filter') == 'bulan' ? 'selected' : '' }}>Per Bulan</option>
             <option value="tahun" {{ request('filter') == 'tahun' ? 'selected' : '' }}>Per Tahun</option>
         </select>
